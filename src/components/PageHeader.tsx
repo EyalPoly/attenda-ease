@@ -1,6 +1,5 @@
 import { Card, Paper, Typography } from "@mui/material";
 import React from "react";
-import "../styles/PageHeader.css";
 import { styled } from "@mui/material/styles";
 
 interface Props {
@@ -14,7 +13,7 @@ const PageHeaderStyled = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(),
   textAlign: "center",
 }));
 
@@ -23,15 +22,17 @@ const CardStyled = styled(Card)(({ theme }) => ({
   padding: theme.spacing(2),
   color: "#3c44b1",
   borderRadius: "12px",
-  marginBottom: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+  marginRight: theme.spacing(4),
 }));
 
 const PageTitleWrapper = styled("div")(({ theme }) => ({
-  paddingLeft: theme.spacing(2),
+  paddingLeft: theme.spacing(0),
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   marginTop: theme.spacing(4),
+  marginRight: theme.spacing(6),
 }));
 
 const PageTitleStyled = styled(Typography)(({ theme }) => ({

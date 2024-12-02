@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Box, Button, FormControl } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -13,7 +13,7 @@ const FormStyled = styled(FormControl)(({ theme }) => ({
   },
 }));
 
-interface AttendanceDayData {
+export interface AttendanceDayData {
   workplace: string;
   isAbsence: boolean;
   startHour: string;
@@ -24,24 +24,48 @@ interface AttendanceDayData {
   comments: string;
 }
 
-function AttendanceDayForm() {
+interface AttendanceDayFormProps {
+  attendanceData: AttendanceDayData | null;
+  onSubmit: (data: AttendanceDayData) => void;
+}
+
+function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm<AttendanceDayData>();
 
   const isAbsence = watch("isAbsence");
 
-  const onSubmit: SubmitHandler<AttendanceDayData> = (data) => {
+  const handleFormSubmit: SubmitHandler<AttendanceDayData> = (data) => {
     console.log("Attendance Data Submitted: ", data);
-    // Handle saving data (e.g., send to backend)
+    onSubmit(data);
   };
+
+  useEffect(() => {
+    console.log("Attendance Data Changed: ", attendanceData);
+    if (attendanceData) {
+      reset(attendanceData);
+    } else {
+      reset({
+        workplace: "",
+        isAbsence: false,
+        startHour: "",
+        endHour: "",
+        frontalHours: 0,
+        individualHours: 0,
+        stayingHours: 0,
+        comments: ""
+      });
+    }
+  }, [attendanceData, reset]);
 
   return (
     <FormStyled>
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+      <form onSubmit={handleSubmit(handleFormSubmit)} autoComplete="off">
         <Grid container>
           <Grid size={{ xs: 6, md: 8 }}>
             <CheckBox

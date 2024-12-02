@@ -16,12 +16,24 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 import attendMeIcon from "../assets/icons/AttendMeIcon.png";
 import { Link } from "react-router-dom";
 
-const pages = [
-  { name: "Attendance Report", path: "/attendance/report" },
-  { name: "Routine Working Days", path: "/attendance/working-days" },
-  { name: "Attendance History", path: "/attendance/history" },
+export const pages = [
+  {
+    name: "Attendance Report",
+    nameHebrew: "דו״ח נוכחות חודשי",
+    path: "/attendance/report",
+  },
+  {
+    name: "Routine Working Days",
+    nameHebrew: "ימי עבודה שגרתיים",
+    path: "/attendance/working-days",
+  },
+  {
+    name: "Attendance History",
+    nameHebrew: "היסטוריית נוכחות",
+    path: "/attendance/history",
+  },
 ];
-const settings = ["Profile", "Logout"];
+export const settings = ["Profile", "Logout"];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -78,7 +90,7 @@ function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -110,7 +122,7 @@ function Header() {
                   onClick={handleCloseNavMenu}
                 >
                   <Typography sx={{ textAlign: "center" }}>
-                    {page.name}
+                    {page.nameHebrew}
                   </Typography>
                 </MenuItem>
               ))}
@@ -136,13 +148,17 @@ function Header() {
                   },
                 }}
               >
-                {page.name}
+                {page.nameHebrew}
               </Button>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton
+                aria-label="Open settings"
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0 }}
+              >
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
