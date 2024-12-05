@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -6,46 +6,57 @@ import { Dayjs } from "dayjs";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AttendanceDayForm from "./AttendanceDayForm";
+import Popup from "./Popup";
 import axios from "axios";
 
-
 const PaperStyled = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(5),
+  margin: theme.spacing(2),
   padding: theme.spacing(3),
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
 }));
 
 interface CalendarProps {
-  month: Dayjs;
+  initialDate: Dayjs;
 }
 
-function Calendar({ month }: CalendarProps) {
+function Calendar({ initialDate }: CalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
-  const [attendanceForms, setAttendanceForms] = useState<{ [key: number]: any }>({});
+  const [attendanceForms, setAttendanceForms] = useState<{
+    [key: number]: any;
+  }>({});
   const [selectedAttendanceData, setSelectedAttendanceData] = useState(null);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchDataForMonth = async () => {
-  //     const monthKey = month.format("YYYY-MM");
-  //     try {
-  //       const response = await axios.get(`/api/attendance/${monthKey}`);
-  //       setAttendanceForms(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching attendance data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchDataForMonth = async () => {
+      const monthKey = initialDate.format("YYYY-MM");
+      try {
+        const response = await axios.get(`/api/attendance/${monthKey}`);
+        setAttendanceForms(response.data);
+      } catch (error) {
+        console.error("Error fetching attendance data:", error);
+      }
+    };
 
-  //   fetchDataForMonth();
-  // }, [month]);
+    // fetchDataForMonth();
+    // console.log("Initial Date:", initialDate);
+    setSelectedDate(initialDate);
+  }, []);
 
   useEffect(() => {
     if (selectedDate) {
       const day = selectedDate.date();
+      // console.log("Selected Day:", day);
       setSelectedAttendanceData(attendanceForms[day] || null);
     }
   }, [selectedDate, attendanceForms]);
 
   function handleDateChange(newDate: Dayjs) {
     setSelectedDate(newDate);
+    setOpenPopup(true);
   }
 
   function handleFormSubmit(day: number | undefined, data: any) {
@@ -54,21 +65,46 @@ function Calendar({ month }: CalendarProps) {
         ...prev,
         [day]: data,
       }));
-      console.log("Updated Attendance Forms:", attendanceForms);
+      // console.log("Updated Attendance Forms:", attendanceForms);
     } else {
       console.error("Day is undefined, cannot update attendance forms.");
     }
+    setOpenPopup(false);
+  }
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
   }
 
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateCalendar value={selectedDate} onChange={handleDateChange} />
+        <DateCalendar
+          defaultValue={initialDate}
+          value={selectedDate}
+          onChange={handleDateChange}
+        />
       </LocalizationProvider>
-      <PaperStyled>
-        <AttendanceDayForm attendanceData={selectedAttendanceData}
-        onSubmit={(data) => handleFormSubmit(selectedDate?.date(), data)} />
-      </PaperStyled>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title={
+          selectedDate
+            ? `${selectedDate.format("DD/MM/YYYY")} - פרטי נוכחות`
+            : "פרטי נוכחות"
+        }
+      >
+        <PaperStyled>
+          <AttendanceDayForm
+            attendanceData={selectedAttendanceData}
+            onSubmit={(data) => handleFormSubmit(selectedDate?.date(), data)}
+          />
+        </PaperStyled>
+      </Popup>
     </>
   );
 }

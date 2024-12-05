@@ -76,15 +76,8 @@ describe("AttendanceDayForm Component", () => {
   });
 
   it("validates form inputs with patterns", async () => {
-    const mockConsoleLog = vi.spyOn(console, "log");
-    render(
-      <AttendanceDayForm
-        attendanceData={null}
-        onSubmit={function (data: AttendanceDayData): void {
-          console.log("Form submitted with data:", data);
-        }}
-      />
-    );
+    const onSubmitMock = vi.fn();
+    render(<AttendanceDayForm attendanceData={null} onSubmit={onSubmitMock} />);
 
     const workplaceInput = screen.getByLabelText("מקום עבודה");
     const startHourInput = screen.getByLabelText("שעת התחלה");
@@ -95,19 +88,16 @@ describe("AttendanceDayForm Component", () => {
     await userEvent.type(startHourInput, "09:00");
     await userEvent.click(submitButton);
 
-    // Error should prevent form submission
-    expect(mockConsoleLog).not.toHaveBeenCalled();
-    mockConsoleLog.mockClear();
+    // Check that onSubmit was not called due to validation error
+    expect(onSubmitMock).not.toHaveBeenCalled();
   });
 
   it("submits form with correct data", async () => {
-    const mockConsoleLog = vi.spyOn(console, "log");
+    const onSubmitMock = vi.fn();
     render(
       <AttendanceDayForm
         attendanceData={null}
-        onSubmit={function (data: AttendanceDayData): void {
-          console.log("Form submitted with data:", data);
-        }}
+        onSubmit={onSubmitMock}
       />
     );
 
@@ -121,15 +111,12 @@ describe("AttendanceDayForm Component", () => {
 
     await userEvent.click(screen.getByText("שמור"));
 
-    expect(mockConsoleLog).toHaveBeenCalledWith(
-      "Attendance Data Submitted: ",
+    expect(onSubmitMock).toHaveBeenCalledWith(
       expect.objectContaining({
         workplace: "מקום עבודה",
         startHour: "09:00",
         endHour: "17:00",
       })
     );
-
-    mockConsoleLog.mockClear();
   });
 });

@@ -29,7 +29,10 @@ interface AttendanceDayFormProps {
   onSubmit: (data: AttendanceDayData) => void;
 }
 
-function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps) {
+function AttendanceDayForm({
+  attendanceData,
+  onSubmit,
+}: AttendanceDayFormProps) {
   const {
     register,
     handleSubmit,
@@ -41,12 +44,12 @@ function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps)
   const isAbsence = watch("isAbsence");
 
   const handleFormSubmit: SubmitHandler<AttendanceDayData> = (data) => {
-    console.log("Attendance Data Submitted: ", data);
+    // console.log("Attendance Data Submitted: ", data);
     onSubmit(data);
   };
 
   useEffect(() => {
-    console.log("Attendance Data Changed: ", attendanceData);
+    // console.log("Attendance Data Changed: ", attendanceData);
     if (attendanceData) {
       reset(attendanceData);
     } else {
@@ -58,7 +61,7 @@ function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps)
         frontalHours: 0,
         individualHours: 0,
         stayingHours: 0,
-        comments: ""
+        comments: "",
       });
     }
   }, [attendanceData, reset]);
@@ -75,7 +78,7 @@ function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps)
               required={false}
             />
           </Grid>
-          <Grid size={{ xs: 6, md: 8 }}>
+          <Grid size={{ xs: 6, md: 10 }}>
             <AttendanceFormInput
               name="workplace"
               label="מקום עבודה"
@@ -161,12 +164,9 @@ function AttendanceDayForm({ attendanceData, onSubmit }: AttendanceDayFormProps)
               rows={5}
               error={errors.comments}
             />
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mt={1}
-            >
+          </Grid>
+          <Grid size={12}>
+            <Box display="flex" justifyContent="center" width="100%" mt={1}>
               <Button type="submit" variant="contained" color="primary">
                 שמור
               </Button>

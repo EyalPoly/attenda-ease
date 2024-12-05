@@ -18,9 +18,9 @@ import { Link } from "react-router-dom";
 
 export const pages = [
   {
-    name: "Attendance Report",
-    nameHebrew: "דו״ח נוכחות חודשי",
-    path: "/attendance/report",
+    name: "Attendance History",
+    nameHebrew: "היסטוריית נוכחות",
+    path: "/attendance/history",
   },
   {
     name: "Routine Working Days",
@@ -28,9 +28,9 @@ export const pages = [
     path: "/attendance/working-days",
   },
   {
-    name: "Attendance History",
-    nameHebrew: "היסטוריית נוכחות",
-    path: "/attendance/history",
+    name: "Attendance Report",
+    nameHebrew: "דו״ח נוכחות חודשי",
+    path: "/attendance/report",
   },
 ];
 export const settings = ["Profile", "Logout"];
@@ -62,7 +62,9 @@ function Header() {
     <AppBar position="static" sx={{ transform: "translateZ(0)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, mr: 2, marginLeft: 5 }}
+          >
             <img
               src={attendMeIcon}
               alt="AttendMe Icon"
@@ -86,7 +88,6 @@ function Header() {
           >
             AttendMe
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -128,7 +129,14 @@ function Header() {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center",
+              marginRight: 5,
+            }}
+          >
             {pages.map((page) => (
               <Button
                 name={page.name}

@@ -5,7 +5,7 @@ import Calendar from "../components/Calendar";
 import dayjs, { Dayjs } from "dayjs";
 
 function AttendanceReportPage() {
-  const month: Dayjs = dayjs();
+  const initialDate: Dayjs = dayjs("2024-03-01");
   return (
     <div>
       <Header />
@@ -14,7 +14,7 @@ function AttendanceReportPage() {
         subTitle=".יש למלא את הנוכחות החודשית שלך, ובסוף החודש להגיש את הדו״ח"
         icon={<EventAvailableIcon fontSize="large" />}
       />
-      <Calendar month={month} />
+      <Calendar initialDate={initialDate} />
     </div>
   );
 }
