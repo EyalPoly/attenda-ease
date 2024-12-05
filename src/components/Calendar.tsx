@@ -30,6 +30,9 @@ function Calendar({ initialDate }: CalendarProps) {
   const [openPopup, setOpenPopup] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const startOfMonth = initialDate.startOf("month");
+  const endOfMonth = initialDate.endOf("month");
+
   useEffect(() => {
     const fetchDataForMonth = async () => {
       const monthKey = initialDate.format("YYYY-MM");
@@ -42,14 +45,12 @@ function Calendar({ initialDate }: CalendarProps) {
     };
 
     // fetchDataForMonth();
-    // console.log("Initial Date:", initialDate);
     setSelectedDate(initialDate);
   }, []);
 
   useEffect(() => {
     if (selectedDate) {
       const day = selectedDate.date();
-      // console.log("Selected Day:", day);
       setSelectedAttendanceData(attendanceForms[day] || null);
     }
   }, [selectedDate, attendanceForms]);
@@ -87,6 +88,9 @@ function Calendar({ initialDate }: CalendarProps) {
           defaultValue={initialDate}
           value={selectedDate}
           onChange={handleDateChange}
+          minDate={startOfMonth}
+          maxDate={endOfMonth}
+          views={["day"]}
         />
       </LocalizationProvider>
       <Popup

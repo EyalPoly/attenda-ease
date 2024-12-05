@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Box, Button, FormControl } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -44,12 +44,10 @@ function AttendanceDayForm({
   const isAbsence = watch("isAbsence");
 
   const handleFormSubmit: SubmitHandler<AttendanceDayData> = (data) => {
-    // console.log("Attendance Data Submitted: ", data);
     onSubmit(data);
   };
 
   useEffect(() => {
-    // console.log("Attendance Data Changed: ", attendanceData);
     if (attendanceData) {
       reset(attendanceData);
     } else {

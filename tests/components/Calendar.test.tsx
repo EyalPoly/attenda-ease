@@ -32,8 +32,8 @@ describe("Calendar Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock console.error and console.log to prevent noise in test output
-    // vi.spyOn(console, "error").mockImplementation(() => {});
-    // vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(console, "log").mockImplementation(() => {});
   });
 
   afterEach(() => {
