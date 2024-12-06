@@ -5,7 +5,7 @@ import Calendar from "../components/Calendar";
 import dayjs, { Dayjs } from "dayjs";
 
 function AttendanceReportPage() {
-  const initialDate: Dayjs = dayjs("2024-03-01");
+  const initialDate: Dayjs = dayjs();
   return (
     <div>
       <Header />

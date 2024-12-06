@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AttendanceDayForm from "./AttendanceDayForm";
@@ -37,7 +37,7 @@ function Calendar({ initialDate }: CalendarProps) {
     const fetchDataForMonth = async () => {
       const monthKey = initialDate.format("YYYY-MM");
       try {
-        const response = await axios.get(`/api/attendance/${monthKey}`);
+        const response = await axios.get(`/api/v1/attendance/${monthKey}`);
         setAttendanceForms(response.data);
       } catch (error) {
         console.error("Error fetching attendance data:", error);
