@@ -22,7 +22,7 @@ import {
 
 interface AuthContextType {
   currentUser: User | null;
-  userLogedIn: boolean;
+  userLoggedIn: boolean;
   loading: boolean;
   signup: (email: string, password: string) => Promise<void>;
   loginEmailAndPassword: (email: string, password: string) => Promise<void>;
@@ -39,7 +39,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [userLogedIn, setUserLogedIn] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -51,10 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (user) {
       console.log("User logged in:", user);
       setCurrentUser({ ...user });
-      setUserLogedIn(true);
+      setUserLoggedIn(true);
     } else {
       setCurrentUser(null);
-      setUserLogedIn(false);
+      setUserLoggedIn(false);
     }
     setLoading(false);
   }
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await createUserWithEmailAndPassword(auth, email, password);
       await signOut(auth);
       setCurrentUser(null);
-      setUserLogedIn(false);
+      setUserLoggedIn(false);
     } catch (error) {
       console.log("Error signing up:", error);
       throw error;
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password
       );
       setCurrentUser(userCredential.user);
-      setUserLogedIn(true);
+      setUserLoggedIn(true);
     } catch (error) {
       console.log("Error signing in:", error);
     }
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       setCurrentUser(userCredential.user);
-      setUserLogedIn(true);
+      setUserLoggedIn(true);
     } catch (error) {
       console.log("Error signing in with Google:", error);
     }
@@ -140,7 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const value = {
     currentUser,
-    userLogedIn,
+    userLoggedIn,
     loading,
     signup,
     loginEmailAndPassword,

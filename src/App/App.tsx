@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AttendanceReportPage from "../pages/AttendanceReportPage";
-import { SignupForm } from "../components/auth/singup";
+import { SignupForm } from "../components/auth/SignupForm";
+import { LoginForm } from "../components/auth/LoginForm";
 import { AuthProvider } from "../contexts/authContext/AuthProvider";
 import NotFoundPage from "../pages/NotFoundPage";
 
@@ -9,7 +10,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<AttendanceReportPage />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/profile" element={<AttendanceReportPage />} />
           <Route path="/attendance/report" element={<AttendanceReportPage />} />

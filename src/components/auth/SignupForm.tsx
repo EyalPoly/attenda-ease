@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/authContext/AuthProvider";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
-  const { userLogedIn, signup } = useAuth();
+  const { userLoggedIn, signup } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +56,7 @@ export const SignupForm = () => {
       setIsSigningUp(true);
       try {
         await signup(email, password);
-        navigate("/attendance/report");
+        navigate("/login");
       } catch (err) {
         if (err instanceof Error) {
           if (err.message.includes("email-already-in-use")) {
@@ -73,22 +73,28 @@ export const SignupForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (userLoggedIn) {
+      navigate("/attendance/report");
+    }
+  }, [userLoggedIn, navigate]);
+
   return (
     <>
-      {userLogedIn && navigate("/attendance/report")}
-
       <main className="w-full h-screen flex self-center place-content-center place-items-center">
         <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
           <div className="text-center mb-6">
             <div className="mt-2">
               <h3 className="text-gray-800 text-xl font-semibold sm:text-2xl">
-                Create New Account
+                צור חשבון חדש
               </h3>
             </div>
           </div>
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-gray-600 font-bold">Email</label>
+              <label className="text-sm text-gray-600 font-bold">
+                דואר אלקטרוני
+              </label>
               <input
                 type="email"
                 autoComplete="email"
@@ -108,9 +114,7 @@ export const SignupForm = () => {
             </div>
 
             <div>
-              <label className="text-sm text-gray-600 font-bold">
-                Password
-              </label>
+              <label className="text-sm text-gray-600 font-bold">סיסמה</label>
               <input
                 disabled={isSigningUp}
                 type="password"
@@ -131,7 +135,7 @@ export const SignupForm = () => {
             </div>
             <div>
               <label className="text-sm text-gray-600 font-bold">
-                Confirm Password
+                אימות סיסמה
               </label>
               <input
                 disabled={isSigningUp}
@@ -163,15 +167,15 @@ export const SignupForm = () => {
               type="submit"
               disabled={isSigningUp}
             >
-              {isSigningUp ? "Signing up..." : "Sign up"}
+              {isSigningUp ? "מתחבר..." : "התחברות"}
             </button>
             <div className="text-sm text-center">
-              <span>Already have an account? </span>
+              <span>כבר יש חשבון? </span>
               <Link
                 to={"/login"}
                 className="text-center text-sm hover:underline font-bold"
               >
-                Login
+                התחברות
               </Link>
             </div>
           </form>
