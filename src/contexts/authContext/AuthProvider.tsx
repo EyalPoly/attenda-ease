@@ -118,20 +118,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     currentPassword: string,
     newPassword: string
   ) => {
-    if (!currentUser) throw new Error("No user logged in");
-
     try {
-      if (currentUser.email) {
-        const credential = EmailAuthProvider.credential(
-          currentUser.email,
-          currentPassword
-        );
-        await reauthenticateWithCredential(currentUser, credential);
-        await updatePassword(currentUser, newPassword);
-      } else {
-        console.log("User email is null");
-        throw new Error("User email is null");
-      }
+      if (!currentUser) throw new Error("No user logged in");
+
+      if (!currentUser.email) throw new Error("User email is null");
+
+      const credential = EmailAuthProvider.credential(
+        currentUser.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(currentUser, credential);
+      await updatePassword(currentUser, newPassword);
     } catch (error) {
       console.log("Error updating password:", error);
       throw error;

@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  within,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
@@ -12,7 +6,6 @@ import Calendar from "../../src/components/Calendar";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import AttendanceDayForm from "../../src/components/AttendanceDayForm";
 
 vi.mock("axios");
 
@@ -61,40 +54,56 @@ describe("Calendar Component", () => {
     it("should open popup when clicking a date", async () => {
       renderCalendar();
 
-      const dayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const dayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
       await userEvent.click(dayCell);
 
       expect(screen.getByText(/פרטי נוכחות/)).toBeInTheDocument();
-      expect(screen.getByLabelText(new RegExp(mockDate.format("DD/MM/YYYY")))).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(new RegExp(mockDate.format("DD/MM/YYYY")))
+      ).toBeInTheDocument();
     });
 
     it("render popup open and close correctly", async () => {
       renderCalendar();
-      const dayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const dayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
 
       // First open
       await userEvent.click(dayCell);
-      const firstTitle = screen.getByText(new RegExp(mockDate.format("DD/MM/YYYY")));
+      const firstTitle = screen.getByText(
+        new RegExp(mockDate.format("DD/MM/YYYY"))
+      );
       expect(firstTitle).toBeInTheDocument();
 
       // Close
       await userEvent.click(screen.getByText("X"));
       await waitFor(() => {
-        expect(screen.queryByText(new RegExp(mockDate.format("DD/MM/YYYY")))).not.toBeInTheDocument();
+        expect(
+          screen.queryByText(new RegExp(mockDate.format("DD/MM/YYYY")))
+        ).not.toBeInTheDocument();
       });
 
       // Reopen
       await userEvent.click(dayCell);
-      expect(screen.getByText(new RegExp(mockDate.format("DD/MM/YYYY")))).toBeInTheDocument();
+      expect(
+        screen.getByText(new RegExp(mockDate.format("DD/MM/YYYY")))
+      ).toBeInTheDocument();
     });
 
     it("render popup close after save click", async () => {
       renderCalendar();
-      const dayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const dayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
 
       // First open
       await userEvent.click(dayCell);
-      const firstTitle = screen.getByText(new RegExp(mockDate.format("DD/MM/YYYY")));
+      const firstTitle = screen.getByText(
+        new RegExp(mockDate.format("DD/MM/YYYY"))
+      );
       expect(firstTitle).toBeInTheDocument();
 
       // Fill out the form
@@ -124,7 +133,9 @@ describe("Calendar Component", () => {
     it("renders AttendanceDayForm when a date is clicked", async () => {
       renderCalendar();
 
-      const firstDayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const firstDayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
       expect(firstDayCell).toBeInTheDocument();
 
       await userEvent.click(firstDayCell);
@@ -138,7 +149,9 @@ describe("Calendar Component", () => {
       renderCalendar();
 
       // Click the first day
-      const firstDayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const firstDayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
       await userEvent.click(firstDayCell);
 
       // Fill out the form
@@ -174,7 +187,9 @@ describe("Calendar Component", () => {
       renderCalendar();
 
       // Click the first day
-      const firstDayCell = screen.getByRole("gridcell", { name: mockDate.date().toString() });
+      const firstDayCell = screen.getByRole("gridcell", {
+        name: mockDate.date().toString(),
+      });
       await userEvent.click(firstDayCell);
 
       // Fill out the form
@@ -201,7 +216,9 @@ describe("Calendar Component", () => {
       });
 
       // Click the second day
-      const secondDayCell = screen.getByRole("gridcell", { name: (mockDate.date() + 1).toString() });
+      const secondDayCell = screen.getByRole("gridcell", {
+        name: (mockDate.date() + 1).toString(),
+      });
       await userEvent.click(secondDayCell);
 
       // Verify the form is empty

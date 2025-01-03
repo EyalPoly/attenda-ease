@@ -12,7 +12,10 @@ import {
   Tooltip,
   MenuItem,
 } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import {
+  Menu as MenuIcon,
+  MoreVert as MoreVertIcon,
+} from "@mui/icons-material";
 import attendMeIcon from "../assets/icons/AttendMeIcon.png";
 import { Link } from "react-router-dom";
 
@@ -33,7 +36,7 @@ export const pages = [
     path: "/attendance/report",
   },
 ];
-export const settings = ["Profile", "Logout"];
+export const settings = ["פרופיל", "התנתק"];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -165,9 +168,9 @@ function Header() {
               <IconButton
                 aria-label="Open settings"
                 onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
+                sx={{ p: 1, color: "white", fontSize: "30px" }}
               >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <MenuIcon />
               </IconButton>
             </Tooltip>
             <Menu
