@@ -45,8 +45,8 @@ describe("SignupForm", () => {
     renderSignupForm();
 
     expect(screen.getByLabelText(/דואר אלקטרוני/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/סיסמה/i)).toHaveLength(2);
-    expect(screen.getByLabelText(/אימות סיסמה/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^סיסמה$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^אימות סיסמה$/i)).toBeInTheDocument();
   });
 
   it("shows error messages for invalid email and password", async () => {
@@ -55,12 +55,9 @@ describe("SignupForm", () => {
     fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
       target: { value: "invalid-email" },
     });
-    const passwordInput = document.getElementById("password");
-    if (passwordInput) {
-      fireEvent.change(passwordInput, {
-        target: { value: "short" },
-      });
-    }
+    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
+      target: { value: "short" },
+    });
     fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
       target: { value: "short" },
     });
@@ -81,12 +78,9 @@ describe("SignupForm", () => {
     fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
       target: { value: "email.@gmail.com" },
     });
-    const passwordInput = document.getElementById("password");
-    if (passwordInput) {
-      fireEvent.change(passwordInput, {
-        target: { value: "Password123" },
-      });
-    }
+    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
+      target: { value: "Password123" },
+    });
     fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
       target: { value: "Password124" },
     });
@@ -104,12 +98,9 @@ describe("SignupForm", () => {
     fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
       target: { value: "test@example.com" },
     });
-    const passwordInput = document.getElementById("password");
-    if (passwordInput) {
-      fireEvent.change(passwordInput, {
-        target: { value: "Password123" },
-      });
-    }
+    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
+      target: { value: "Password123" },
+    });
     fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
       target: { value: "Password123" },
     });
@@ -127,12 +118,9 @@ describe("SignupForm", () => {
     fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
       target: { value: "test@example.com" },
     });
-    const passwordInput = document.getElementById("password");
-    if (passwordInput) {
-      fireEvent.change(passwordInput, {
-        target: { value: "Password123" },
-      });
-    }
+    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
+      target: { value: "Password123" },
+    });
     fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
       target: { value: "Password123" },
     });

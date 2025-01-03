@@ -71,10 +71,14 @@ export const LoginForm = () => {
 
           <form onSubmit={onSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm text-gray-600 font-bold text-right">
+              <label
+                htmlFor="email"
+                className="block text-sm text-gray-600 font-bold text-right"
+              >
                 דואר אלקטרוני
               </label>
               <input
+                id="email"
                 type="email"
                 autoComplete="email"
                 required
@@ -87,10 +91,14 @@ export const LoginForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-600 font-bold text-right">
+              <label
+                htmlFor="password"
+                className="block text-sm text-gray-600 font-bold text-right"
+              >
                 סיסמה
               </label>
               <input
+                id="password"
                 type="password"
                 autoComplete="current-password"
                 required
@@ -107,6 +115,7 @@ export const LoginForm = () => {
             <button
               type="submit"
               disabled={isLoggingIn}
+              data-testid="email-login-button"
               className={`w-full px-4 py-2 text-white font-medium rounded-lg ${
                 isLoggingIn
                   ? "bg-gray-300 cursor-not-allowed"
@@ -124,6 +133,7 @@ export const LoginForm = () => {
           </p>
           <button
             disabled={isLoggingIn}
+            data-testid="google-login-button"
             onClick={(e) => {
               onGoogleLogin(e);
             }}
