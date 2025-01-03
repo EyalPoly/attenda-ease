@@ -164,9 +164,9 @@ function Header() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="הגדרות">
               <IconButton
-                aria-label="Open settings"
+                aria-label="הגדרות"
                 onClick={handleOpenUserMenu}
                 sx={{ p: 1, color: "white", fontSize: "30px" }}
               >

@@ -92,11 +92,14 @@ export const SignupForm = () => {
           </div>
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-gray-600 font-bold">
+              <label
+                htmlFor="email"
+                className="text-sm text-gray-600 font-bold"
+              >
                 דואר אלקטרוני
               </label>
               <input
-                type="email"
+                id="email"
                 autoComplete="email"
                 required
                 value={email}
@@ -114,8 +117,14 @@ export const SignupForm = () => {
             </div>
 
             <div>
-              <label className="text-sm text-gray-600 font-bold">סיסמה</label>
+              <label
+                htmlFor="password"
+                className="text-sm text-gray-600 font-bold"
+              >
+                סיסמה
+              </label>
               <input
+                id="password"
                 disabled={isSigningUp}
                 type="password"
                 autoComplete="new-password"
@@ -134,10 +143,14 @@ export const SignupForm = () => {
               )}
             </div>
             <div>
-              <label className="text-sm text-gray-600 font-bold">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm text-gray-600 font-bold"
+              >
                 אימות סיסמה
               </label>
               <input
+                id="confirmPassword"
                 disabled={isSigningUp}
                 type="password"
                 autoComplete="off"
