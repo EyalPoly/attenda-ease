@@ -7,6 +7,7 @@ import {
 } from "../../src/contexts/authContext/AuthProvider";
 import * as firebaseAuth from "firebase/auth";
 import "@testing-library/jest-dom";
+import { useEffect } from "react";
 
 vi.mock("../../src/firebase/firebase", () => ({
   auth: vi.fn(),
@@ -86,7 +87,7 @@ const TestComponent = () => {
 describe("AuthProvider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock onAuthStateChanged to immediately call callback
+    // Default to logged out state
     (firebaseAuth.onAuthStateChanged as any).mockImplementation(
       (_: any, callback: (user: firebaseAuth.User | null) => void) => {
         callback(null);
@@ -251,7 +252,7 @@ describe("AuthProvider", () => {
       mockError
     );
 
-    const consoleSpy = vi.spyOn(console, "log"); 
+    const consoleSpy = vi.spyOn(console, "log");
 
     render(
       <AuthProvider>
@@ -266,5 +267,126 @@ describe("AuthProvider", () => {
     // You can also add type assertion for better TypeScript support
     const statusElement = screen.getByTestId("user-status");
     expect(statusElement).toHaveTextContent("logged-out");
+  });
+
+  describe("Password Update Error Cases", () => {
+    // Create a wrapper component that exposes the auth functions
+    const TestWrapper = ({ onError }: { onError: (error: Error) => void }) => {
+      const auth = useAuth();
+
+      useEffect(() => {
+        const testAuth = async () => {
+          try {
+            await auth.updateUserPassword("oldpass", "newpass");
+          } catch (error) {
+            onError(error as Error);
+          }
+        };
+        testAuth();
+      }, [auth, onError]);
+
+      return null;
+    };
+
+    beforeEach(() => {
+      // Mock auth state to be logged in
+      (firebaseAuth.onAuthStateChanged as any).mockImplementation(
+        (_: any, callback: (user: firebaseAuth.User | null) => void) => {
+          callback(mockUser);
+          return vi.fn();
+        }
+      );
+    });
+
+    it("handles no user logged in error", async () => {
+      // Override to logged out state
+      (firebaseAuth.onAuthStateChanged as any).mockImplementation(
+        (_: any, callback: (user: firebaseAuth.User | null) => void) => {
+          callback(null);
+          return vi.fn();
+        }
+      );
+
+      const errorPromise = new Promise<Error>((resolve) => {
+        render(
+          <AuthProvider>
+            <TestWrapper onError={resolve} />
+          </AuthProvider>
+        );
+      });
+
+      const error = await errorPromise;
+      expect(error.message).toBe("No user logged in");
+      expect(firebaseAuth.updatePassword).not.toHaveBeenCalled();
+    });
+
+    it("handles null email error", async () => {
+      // Create a mock user with null email
+      const userWithNullEmail = {
+        ...mockUser,
+        email: null,
+      };
+
+      // Mock logged in user state with null email
+      (firebaseAuth.onAuthStateChanged as any).mockImplementation(
+        (_: any, callback: (user: firebaseAuth.User | null) => void) => {
+          callback(userWithNullEmail);
+          return vi.fn();
+        }
+      );
+
+      const resultPromise = new Promise<Error>((resolve) => {
+        render(
+          <AuthProvider>
+            <TestWrapper onError={resolve} />
+          </AuthProvider>
+        );
+      });
+
+      const result = await resultPromise;
+      expect(result.message).toBe("User email is null");
+      expect(firebaseAuth.EmailAuthProvider.credential).not.toHaveBeenCalled();
+      expect(firebaseAuth.reauthenticateWithCredential).not.toHaveBeenCalled();
+      expect(firebaseAuth.updatePassword).not.toHaveBeenCalled();
+    });
+
+    it("handles reauthentication failure", async () => {
+      const mockError = new Error("Reauthentication failed");
+      (firebaseAuth.reauthenticateWithCredential as any).mockRejectedValueOnce(
+        mockError
+      );
+
+      const resultPromise = new Promise<Error>((resolve) => {
+        render(
+          <AuthProvider>
+            <TestWrapper onError={resolve} />
+          </AuthProvider>
+        );
+      });
+
+      const result = await resultPromise;
+      expect(result.message).toBe("Reauthentication failed");
+      expect(firebaseAuth.updatePassword).not.toHaveBeenCalled();
+    });
+
+    it.only("handles password update failure", async () => {
+      const mockError = new Error("Password update failed");
+      (
+        firebaseAuth.reauthenticateWithCredential as any
+      ).mockResolvedValueOnce();
+      (firebaseAuth.updatePassword as any).mockRejectedValueOnce(mockError);
+
+      const resultPromise = new Promise<Error>((resolve) => {
+        render(
+          <AuthProvider>
+            <TestWrapper onError={resolve} />
+          </AuthProvider>
+        );
+      });
+
+      const result = await resultPromise;
+      expect(result.message).toBe("Password update failed");
+      expect(firebaseAuth.updatePassword).toHaveBeenCalled();
+    });
   });
 });
