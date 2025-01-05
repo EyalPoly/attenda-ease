@@ -7,14 +7,12 @@ import {
   Typography,
   Menu,
   Container,
-  Avatar,
   Button,
   Tooltip,
   MenuItem,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
-  MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
 import attendMeIcon from "../assets/icons/AttendMeIcon.png";
 import { Link } from "react-router-dom";

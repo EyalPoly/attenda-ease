@@ -27,5 +27,5 @@
     "tests/components/Popup.test.tsx",
     "tests/auth/AuthProvider.test.tsx",
     "tests/auth/SignupForm.test.tsx"
-  ]
+, "tests/pages/AttendanceReportPage.test.tsx"  ]
 }
