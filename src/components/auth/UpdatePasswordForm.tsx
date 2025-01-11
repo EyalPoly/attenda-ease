@@ -49,8 +49,7 @@ const UpdatePasswordForm = ({
         await reauthenticateUsingCredential(currentUser, credential);
       }
     } catch (err: Error | any) {
-      errors.currentPassword =
-        err instanceof Error ? err.message : "Invalid password";
+      errors.currentPassword = "Invalid password";
       valid = false;
     }
 
@@ -83,10 +82,9 @@ const UpdatePasswordForm = ({
           setError(
             err instanceof Error ? err.message : "An unknown error occurred"
           );
-        } finally {
-          setIsUpdating(false);
         }
       }
+      setIsUpdating(false);
     }
   };
 
