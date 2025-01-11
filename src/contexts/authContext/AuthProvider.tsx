@@ -33,6 +33,8 @@ interface AuthContextType {
     currentPassword: string,
     newPassword: string
   ) => Promise<void>;
+  reauthenticateUsingCredential: (user: User, credential: any) => Promise<void>;
+  GetEmailAuthProvider: () => any;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -49,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function initializeUser(user: any) {
     if (user) {
-      console.log("User logged in:", user);
+      console.log("User logged in:", user.email);
       setCurrentUser({ ...user });
       setUserLoggedIn(true);
     } else {
@@ -80,8 +82,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
       setCurrentUser(userCredential.user);
       setUserLoggedIn(true);
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error signing in:", error);
+      console.log("Error code:", error.code);
+      if (error.code === "auth/invalid-credential") {
+        throw new Error("דוא״ל או סיסמה אינם נכונים");
+      }
+      throw error;
     }
   };
 
@@ -135,6 +142,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const reauthenticateUsingCredential = async (user: User, credential: any) => {
+    try {
+      await reauthenticateWithCredential(user, credential);
+    } catch (error) {
+      console.log("Error reauthenticating user:", error);
+      throw error;
+    }
+  };
+
+  const GetEmailAuthProvider = () => {
+    return EmailAuthProvider;
+  };
+
   const value = {
     currentUser,
     userLoggedIn,
@@ -145,6 +165,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
     resetPassword,
     updateUserPassword,
+    reauthenticateUsingCredential,
+    GetEmailAuthProvider,
   };
 
   return (

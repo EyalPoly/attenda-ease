@@ -245,7 +245,7 @@ describe("AuthProvider", () => {
     );
   });
 
-  it("handles errors appropriately", async () => {
+  it.only("handles errors appropriately", async () => {
     const user = userEvent.setup();
     const mockError = new Error("Auth error");
     (firebaseAuth.signInWithEmailAndPassword as any).mockRejectedValueOnce(
@@ -263,8 +263,6 @@ describe("AuthProvider", () => {
     await user.click(screen.getByText("Login"));
 
     expect(consoleSpy).toHaveBeenCalledWith("Error signing in:", mockError);
-
-    // You can also add type assertion for better TypeScript support
     const statusElement = screen.getByTestId("user-status");
     expect(statusElement).toHaveTextContent("logged-out");
   });
@@ -369,7 +367,7 @@ describe("AuthProvider", () => {
       expect(firebaseAuth.updatePassword).not.toHaveBeenCalled();
     });
 
-    it.only("handles password update failure", async () => {
+    it("handles password update failure", async () => {
       const mockError = new Error("Password update failed");
       (
         firebaseAuth.reauthenticateWithCredential as any

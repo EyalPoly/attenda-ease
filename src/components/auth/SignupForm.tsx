@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authContext/AuthProvider";
+import { validatePassword } from "../../utils/ValidatePassword";
 
 export const SignupForm = () => {
   const navigate = useNavigate();
@@ -20,11 +21,6 @@ export const SignupForm = () => {
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
     return emailRegex.test(email);
-  };
-
-  const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,30}$/;
-    return passwordRegex.test(password);
   };
 
   const validateForm = () => {
@@ -60,7 +56,7 @@ export const SignupForm = () => {
       } catch (err) {
         if (err instanceof Error) {
           if (err.message.includes("email-already-in-use")) {
-            setError("Email is already in use");
+            setError("דוא״ל כבר קיים במערכת");
           } else {
             setError(err.message);
           }
@@ -81,7 +77,7 @@ export const SignupForm = () => {
 
   return (
     <>
-      <main className="w-full h-screen flex self-center place-content-center place-items-center">
+      <main className="w-full h-auto flex justify-center items-start mt-5">
         <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
           <div className="text-center mb-6">
             <div className="mt-2">
@@ -94,7 +90,7 @@ export const SignupForm = () => {
             <div>
               <label
                 htmlFor="email"
-                className="text-sm text-gray-600 font-bold"
+                className="block text-sm text-gray-600 font-bold text-right"
               >
                 דואר אלקטרוני
               </label>
@@ -119,7 +115,7 @@ export const SignupForm = () => {
             <div>
               <label
                 htmlFor="password"
-                className="text-sm text-gray-600 font-bold"
+                className="block text-sm text-gray-600 font-bold text-right"
               >
                 סיסמה
               </label>
@@ -145,7 +141,7 @@ export const SignupForm = () => {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="text-sm text-gray-600 font-bold"
+                className="block text-sm text-gray-600 font-bold text-right"
               >
                 אימות סיסמה
               </label>
@@ -180,7 +176,7 @@ export const SignupForm = () => {
               type="submit"
               disabled={isSigningUp}
             >
-              {isSigningUp ? "מתחבר..." : "התחברות"}
+              {isSigningUp ? "נרשם..." : "הרשמה"}
             </button>
             <div className="text-sm text-center">
               <span>כבר יש חשבון? </span>

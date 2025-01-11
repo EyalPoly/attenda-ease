@@ -3,10 +3,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { describe, it, expect, vi, Mock } from "vitest";
 import "@testing-library/jest-dom";
 import { SignupForm } from "../../src/components/auth/SignupForm";
-import {
-  AuthProvider,
-  useAuth,
-} from "../../src/contexts/authContext/AuthProvider";
+import { useAuth } from "../../src/contexts/authContext/AuthProvider";
+
+const mockSignup = vi.fn();
 
 // Mock useAuth hook
 vi.mock("../../src/contexts/authContext/AuthProvider", async () => {
@@ -21,8 +20,6 @@ vi.mock("../../src/contexts/authContext/AuthProvider", async () => {
     })),
   };
 });
-
-const mockSignup = vi.fn();
 
 describe("SignupForm", () => {
   beforeEach(() => {

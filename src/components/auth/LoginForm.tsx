@@ -110,7 +110,7 @@ export const LoginForm = () => {
               />
             </div>
 
-            {error && <span className="text-red-600 font-bold">{error}</span>}
+            {error && <span className="block text-red-600 font-bold text-right">{error}</span>}
 
             <button
               type="submit"
@@ -127,7 +127,7 @@ export const LoginForm = () => {
           </form>
           <p className="text-center text-sm">
             אין לך חשבון?{" "}
-            <Link to={"/register"} className="hover:underline font-bold">
+            <Link to={"/signup"} className="hover:underline font-bold">
               ליצירת חשבון חדש
             </Link>
           </p>

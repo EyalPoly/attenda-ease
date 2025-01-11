@@ -13,6 +13,7 @@ import SignupPage from "../pages/SignupPage";
 import LoginPage from "../pages/LoginPage";
 import { AuthProvider } from "../contexts/authContext/AuthProvider";
 import NotFoundPage from "../pages/NotFoundPage";
+import ProfilePage from "../pages/ProfilePage";
 
 // Component to protect authenticated routes
 const PrivateRoute = () => {
@@ -50,7 +51,7 @@ export const AppRoutes = () => {
       {/* Protected routes */}
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<AttendanceReportPage />} />
-        <Route path="/profile" element={<AttendanceReportPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/attendance/report" element={<AttendanceReportPage />} />
         <Route path="/attendance/submit" element={<AttendanceReportPage />} />
         <Route
