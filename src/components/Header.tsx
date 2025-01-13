@@ -7,14 +7,14 @@ import {
   Typography,
   Menu,
   Container,
-  Avatar,
   Button,
   Tooltip,
   MenuItem,
 } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import attendMeIcon from "../assets/icons/AttendMeIcon.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authContext/AuthProvider";
 
 export const pages = [
   {
@@ -33,7 +33,10 @@ export const pages = [
     path: "/attendance/report",
   },
 ];
-export const settings = ["Profile", "Logout"];
+export const settings = [
+  { name: "Profile", nameHebrew: "פרופיל", path: "/profile" },
+  { name: "Logout", nameHebrew: "התנתק", path: "/login" },
+];
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -42,6 +45,8 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const { userLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -56,6 +61,22 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleSettingClick = async (setting: (typeof settings)[0]) => {
+    handleCloseUserMenu();
+
+    if (setting.name === "Logout") {
+      try {
+        await logout();
+        navigate("/login", { replace: true });
+      } catch (error) {
+        console.error("Logout failed:", error);
+        // Optionally handle error here
+      }
+    } else {
+      navigate(setting.path);
+    }
   };
 
   return (
@@ -88,113 +109,120 @@ function Header() {
           >
             AttendMe
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem
-                  name={page.name}
-                  component={Link}
-                  to={page.path}
-                  onClick={handleCloseNavMenu}
+          {userLoggedIn && (
+            <>
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="menu"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
                 >
-                  <Typography sx={{ textAlign: "center" }}>
-                    {page.nameHebrew}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-              justifyContent: "center",
-              marginRight: 5,
-            }}
-          >
-            {pages.map((page) => (
-              <Button
-                name={page.name}
-                component={Link}
-                to={page.path}
-                onClick={handleCloseNavMenu}
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{ display: { xs: "block", md: "none" } }}
+                >
+                  {pages.map((page) => (
+                    <MenuItem
+                      name={page.name}
+                      component={Link}
+                      to={page.path}
+                      onClick={handleCloseNavMenu}
+                    >
+                      <Typography sx={{ textAlign: "center" }}>
+                        {page.nameHebrew}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+              <Box
                 sx={{
-                  my: 2,
-                  mx: 2,
-                  color: "white",
-                  display: "block",
-                  fontFamily: "Arial",
-                  fontSize: "20px",
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "#1565c0",
-                  },
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex" },
+                  justifyContent: "center",
+                  marginRight: 5,
                 }}
               >
-                {page.nameHebrew}
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton
-                aria-label="Open settings"
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-              >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem name={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                {pages.map((page) => (
+                  <Button
+                    name={page.name}
+                    component={Link}
+                    to={page.path}
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                      my: 2,
+                      mx: 2,
+                      color: "white",
+                      display: "block",
+                      fontFamily: "Arial",
+                      fontSize: "20px",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "#1565c0",
+                      },
+                    }}
+                  >
+                    {page.nameHebrew}
+                  </Button>
+                ))}
+              </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="הגדרות">
+                  <IconButton
+                    aria-label="הגדרות"
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: 1, color: "white", fontSize: "30px" }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem
+                      name={setting.name}
+                      onClick={() => handleSettingClick(setting)}
+                    >
+                      <Typography sx={{ textAlign: "center" }}>
+                        {setting.nameHebrew}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            </>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

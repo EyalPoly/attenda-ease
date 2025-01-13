@@ -21,5 +21,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "tests/components/Calendar.test.tsx", "tests/components/Popup.test.tsx"]
+  "include": [
+    "src",
+    "tests/components/Calendar.test.tsx",
+    "tests/components/Popup.test.tsx",
+    "tests/auth/AuthProvider.test.tsx",
+    "tests/auth/SignupForm.test.tsx"
+, "tests/pages/AttendanceReportPage.test.tsx"  ]
 }
