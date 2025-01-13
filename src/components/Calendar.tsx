@@ -7,7 +7,7 @@ import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AttendanceDayForm from "./AttendanceDayForm";
 import Popup from "./Popup";
-import axios from "axios";
+// import axios from "axios";
 
 const PaperStyled = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -34,15 +34,15 @@ function Calendar({ initialDate }: CalendarProps) {
   const endOfMonth = initialDate.endOf("month");
 
   useEffect(() => {
-    const fetchDataForMonth = async () => {
-      const monthKey = initialDate.format("YYYY-MM");
-      try {
-        const response = await axios.get(`/api/v1/attendance/${monthKey}`);
-        setAttendanceForms(response.data);
-      } catch (error) {
-        console.error("Error fetching attendance data:", error);
-      }
-    };
+    // const fetchDataForMonth = async () => {
+    //   const monthKey = initialDate.format("YYYY-MM");
+    //   try {
+    //     const response = await axios.get(`/api/v1/attendance/${monthKey}`);
+    //     setAttendanceForms(response.data);
+    //   } catch (error) {
+    //     console.error("Error fetching attendance data:", error);
+    //   }
+    // };
 
     // fetchDataForMonth();
     setSelectedDate(initialDate);

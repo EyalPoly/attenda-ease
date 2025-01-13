@@ -140,7 +140,6 @@ function Header() {
                 >
                   {pages.map((page) => (
                     <MenuItem
-                      name={page.name}
                       component={Link}
                       to={page.path}
                       onClick={handleCloseNavMenu}
@@ -162,7 +161,6 @@ function Header() {
               >
                 {pages.map((page) => (
                   <Button
-                    name={page.name}
                     component={Link}
                     to={page.path}
                     onClick={handleCloseNavMenu}
@@ -211,7 +209,6 @@ function Header() {
                 >
                   {settings.map((setting) => (
                     <MenuItem
-                      name={setting.name}
                       onClick={() => handleSettingClick(setting)}
                     >
                       <Typography sx={{ textAlign: "center" }}>
