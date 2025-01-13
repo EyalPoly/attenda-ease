@@ -13,7 +13,7 @@ const StyledHeadline = styled(Typography)(({ theme }) => ({
   marginBottom: "5px",
 }));
 
-const StyledContent = styled(Typography)(({ theme }) => ({
+const StyledContent = styled(Typography)(() => ({
   color: "black",
   fontSize: "18px",
   fontWeight: "normal",
