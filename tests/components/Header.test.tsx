@@ -97,7 +97,7 @@ describe("Header component", () => {
     });
   });
 
-  it.only("should not render navigation items when user is not logged in", () => {
+  it("should not render navigation items when user is not logged in", () => {
     // Re-render with userLoggedIn set to false
     vi.mocked(mockAuthContext).userLoggedIn = false;
     

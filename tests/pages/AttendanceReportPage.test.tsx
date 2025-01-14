@@ -21,28 +21,6 @@ describe("AttendanceReportPage", () => {
     vi.clearAllMocks();
   });
 
-  it("renders header with navigation elements", () => {
-    renderAttendanceReportPage();
-
-    // Check for logo and brand name
-    expect(screen.getByAltText("AttendMe Icon")).toBeInTheDocument();
-    expect(screen.getByText("AttendMe")).toBeInTheDocument();
-
-    // Check for navigation links
-    expect(
-      screen.getByRole("link", { name: "היסטוריית נוכחות" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "ימי עבודה שגרתיים" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "דו״ח נוכחות חודשי" })
-    ).toBeInTheDocument();
-
-    // Check for settings menu
-    expect(screen.getByLabelText("הגדרות")).toBeInTheDocument();
-  });
-
   it("renders specific page header", () => {
     renderAttendanceReportPage();
 
