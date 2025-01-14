@@ -59,25 +59,75 @@ const mockUser = {
 // Test component to expose auth context
 const TestComponent = () => {
   const auth = useAuth();
+
+  const handleLogin = async () => {
+    try {
+      await auth.loginEmailAndPassword("test@test.com", "password");
+    } catch (error) {
+      // Error is now handled at component level
+      console.log("Login error handled in component:", error);
+    }
+  };
+
   return (
     <div>
       <div data-testid="user-status">
         {auth.userLoggedIn ? "logged-in" : "logged-out"}
       </div>
-      <button onClick={() => auth.signup("test@test.com", "password")}>
+      <button
+        onClick={async () => {
+          try {
+            await auth.signup("test@test.com", "password");
+          } catch (error) {
+            console.log("Signup error handled in component:", error);
+          }
+        }}
+      >
         Sign Up
       </button>
+      <button onClick={handleLogin}>Login</button>
       <button
-        onClick={() => auth.loginEmailAndPassword("test@test.com", "password")}
+        onClick={async () => {
+          try {
+            await auth.loginWithGoogle();
+          } catch (error) {
+            console.log("Google login error handled in component:", error);
+          }
+        }}
       >
-        Login
+        Google Login
       </button>
-      <button onClick={auth.loginWithGoogle}>Google Login</button>
-      <button onClick={auth.logout}>Logout</button>
-      <button onClick={() => auth.resetPassword("test@test.com")}>
+      <button
+        onClick={async () => {
+          try {
+            await auth.logout();
+          } catch (error) {
+            console.log("Logout error handled in component:", error);
+          }
+        }}
+      >
+        Logout
+      </button>
+      <button
+        onClick={async () => {
+          try {
+            await auth.resetPassword("test@test.com");
+          } catch (error) {
+            console.log("Reset password error handled in component:", error);
+          }
+        }}
+      >
         Reset Password
       </button>
-      <button onClick={() => auth.updateUserPassword("oldpass", "newpass")}>
+      <button
+        onClick={async () => {
+          try {
+            await auth.updateUserPassword("oldpass", "newpass");
+          } catch (error) {
+            console.log("Update password error handled in component:", error);
+          }
+        }}
+      >
         Update Password
       </button>
     </div>
@@ -245,7 +295,7 @@ describe("AuthProvider", () => {
     );
   });
 
-  it.only("handles errors appropriately", async () => {
+  it("handles errors appropriately", async () => {
     const user = userEvent.setup();
     const mockError = new Error("Auth error");
     (firebaseAuth.signInWithEmailAndPassword as any).mockRejectedValueOnce(
@@ -262,9 +312,12 @@ describe("AuthProvider", () => {
 
     await user.click(screen.getByText("Login"));
 
-    expect(consoleSpy).toHaveBeenCalledWith("Error signing in:", mockError);
-    const statusElement = screen.getByTestId("user-status");
-    expect(statusElement).toHaveTextContent("logged-out");
+    await waitFor(() => {
+      // Check that error was logged in both AuthProvider and component
+      expect(consoleSpy).toHaveBeenCalledWith("Error signing in:", mockError);
+      expect(consoleSpy).toHaveBeenCalledWith("Login error handled in component:", mockError);
+    });
+    expect(screen.getByTestId("user-status")).toHaveTextContent("logged-out");
   });
 
   describe("Password Update Error Cases", () => {

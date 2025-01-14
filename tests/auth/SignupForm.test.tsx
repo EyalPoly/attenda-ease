@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { BrowserRouter as Router } from "react-router-dom";
 import { describe, it, expect, vi, Mock } from "vitest";
 import "@testing-library/jest-dom";
@@ -38,6 +39,19 @@ describe("SignupForm", () => {
     );
   };
 
+  const fillForm = async (
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
+    await userEvent.type(screen.getByLabelText(/^דואר אלקטרוני/i), email);
+    await userEvent.type(screen.getByLabelText(/^סיסמה/i), password);
+    await userEvent.type(
+      screen.getByLabelText(/^אימות סיסמה/i),
+      confirmPassword
+    );
+  };
+
   it("renders the signup form", () => {
     renderSignupForm();
 
@@ -49,17 +63,9 @@ describe("SignupForm", () => {
   it("shows error messages for invalid email and password", async () => {
     renderSignupForm();
 
-    fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
-      target: { value: "invalid-email" },
-    });
-    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
-      target: { value: "short" },
-    });
-    fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
-      target: { value: "short" },
-    });
+    await fillForm("invalid-email", "short", "short");
 
-    fireEvent.click(screen.getByRole("button", { name: /התחברות/i }));
+    await userEvent.click(screen.getByRole("button", { name: /הרשמה/i }));
 
     expect(await screen.findByText("Invalid email format")).toBeInTheDocument();
     expect(
@@ -67,22 +73,15 @@ describe("SignupForm", () => {
         /Password must be 8-30 characters, include at least one uppercase letter, one lowercase letter, and one number/i
       )
     ).toBeInTheDocument();
+    expect(mockSignup).not.toHaveBeenCalled();
   });
 
   it("shows error message when passwords do not match", async () => {
     renderSignupForm();
 
-    fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
-      target: { value: "email.@gmail.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
-      target: { value: "Password123" },
-    });
-    fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
-      target: { value: "Password124" },
-    });
+    await fillForm("email@gmail.com", "Password123", "Password124");
 
-    fireEvent.click(screen.getByRole("button", { name: /התחברות/i }));
+    await userEvent.click(screen.getByRole("button", { name: /הרשמה/i }));
 
     expect(
       await screen.findByText(/Passwords do not match/i)
@@ -92,17 +91,9 @@ describe("SignupForm", () => {
   it("calls signup function with correct data", async () => {
     renderSignupForm();
 
-    fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
-      target: { value: "Password123" },
-    });
-    fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
-      target: { value: "Password123" },
-    });
+    await fillForm("test@example.com", "Password123", "Password123");
 
-    fireEvent.click(screen.getByRole("button", { name: /התחברות/i }));
+    await userEvent.click(screen.getByRole("button", { name: /הרשמה/i }));
 
     expect(mockSignup).toHaveBeenCalledWith("test@example.com", "Password123");
   });
@@ -112,17 +103,9 @@ describe("SignupForm", () => {
 
     renderSignupForm();
 
-    fireEvent.change(screen.getByLabelText(/דואר אלקטרוני/i), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText(/^סיסמה$/i), {
-      target: { value: "Password123" },
-    });
-    fireEvent.change(screen.getByLabelText(/אימות סיסמה/i), {
-      target: { value: "Password123" },
-    });
+    await fillForm("test@example.com", "Password123", "Password123");
 
-    fireEvent.click(screen.getByRole("button", { name: /התחברות/i }));
+    await userEvent.click(screen.getByRole("button", { name: /הרשמה/i }));
 
     expect(await screen.findByText(/Signup failed/i)).toBeInTheDocument();
   });
